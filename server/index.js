@@ -61,7 +61,6 @@ app.post("/api/contact", async (req, res) => {
    ========================= */
 
 let skills = [
-  // initial example, chahe to apni skills yahan daal sakta hai
   {
     id: 1,
     category: "Security Tools",
@@ -119,7 +118,7 @@ app.delete("/api/skills/:id", (req, res) => {
   res.json(removed);
 });
 
-// In-memory projects data (start me manually fill kar sakta hai)
+// In-memory projects data
 let projects = [
   {
     id: 1,
@@ -187,14 +186,11 @@ app.delete("/api/projects/:id", (req, res) => {
   res.json(removed);
 });
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-// =========================
-// ✦ NEW: Achievements API (CRUD)
-// =========================
+/* =========================
+   ✦ NEW: Achievements API (CRUD)
+   ========================= */
 
 let achievements = [
-  // starting example data, chahe to change kar sakta hai
   {
     id: 1,
     title: "Reported Critical Vulnerability",
@@ -257,9 +253,10 @@ app.delete("/api/achievements/:id", (req, res) => {
   achievements = achievements.filter((a) => a.id !== id);
   res.json(removed);
 });
-// =========================
-// ✦ NEW: Certificates API (CRUD)
-// =========================
+
+/* =========================
+   ✦ NEW: Certificates API (CRUD)
+   ========================= */
 
 let certificates = [
   {
@@ -329,9 +326,10 @@ app.delete("/api/certificates/:id", (req, res) => {
   certificates = certificates.filter((c) => c.id !== id);
   res.json(removed);
 });
-// =========================
-// ✦ NEW: Articles API (CRUD)
-// =========================
+
+/* =========================
+   ✦ NEW: Articles API (CRUD)
+   ========================= */
 
 let articles = [
   {
@@ -403,3 +401,86 @@ app.delete("/api/articles/:id", (req, res) => {
   articles = articles.filter((a) => a.id !== id);
   res.json(removed);
 });
+
+/* =========================
+   ✦ NEW: Activity API (CRUD)
+   ========================= */
+
+let activity = [
+  {
+    id: 1,
+    date: "2025-11-24",
+    title: "New article on API security",
+    description:
+      "Published a detailed article on API security topics.",
+    type: "security",
+  },
+  {
+    id: 2,
+    date: "2025-11-20",
+    title: "Portfolio v2 deployed",
+    description:
+      "Deployed new version with admin panel and activity timeline.",
+    type: "development",
+  },
+];
+
+// GET all activity items
+app.get("/api/activity", (req, res) => {
+  res.json(activity);
+});
+
+// ADD activity item
+app.post("/api/activity", (req, res) => {
+  const { date, title, description, type } = req.body;
+  if (!title) {
+    return res.status(400).json({ error: "Title is required" });
+  }
+
+  const newItem = {
+    id: activity.length ? activity[activity.length - 1].id + 1 : 1,
+    date: date || "",
+    title,
+    description: description || "",
+    type: type || "",
+  };
+
+  activity.push(newItem);
+  res.status(201).json(newItem);
+});
+
+// UPDATE activity item
+app.put("/api/activity/:id", (req, res) => {
+  const id = Number(req.params.id);
+  const index = activity.findIndex((a) => a.id === id);
+  if (index === -1) {
+    return res.status(404).json({ error: "Activity item not found" });
+  }
+
+  const { date, title, description, type } = req.body;
+  activity[index] = {
+    ...activity[index],
+    date: date ?? activity[index].date,
+    title: title ?? activity[index].title,
+    description: description ?? activity[index].description,
+    type: type ?? activity[index].type,
+  };
+
+  res.json(activity[index]);
+});
+
+// DELETE activity item
+app.delete("/api/activity/:id", (req, res) => {
+  const id = Number(req.params.id);
+  const index = activity.findIndex((a) => a.id === id);
+  if (index === -1) {
+    return res.status(404).json({ error: "Activity item not found" });
+  }
+
+  const removed = activity[index];
+  activity = activity.filter((a) => a.id !== id);
+  res.json(removed);
+});
+
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

@@ -9,7 +9,8 @@ import Achievements from "./components/sections/Achievements";
 import Articles from "./components/sections/Articles";
 import Contact from "./components/sections/Contact";
 import Admin from "./components/admin/Admin";
-import Resources from "./components/sections/Resources"; // NEW
+import Resources from "./components/sections/Resources";
+import Timeline from "./components/sections/Timeline"; // NEW
 import "./App.css";
 
 function App() {
@@ -37,12 +38,13 @@ function App() {
       <Navbar theme={theme} setTheme={setTheme} />
 
       <Routes>
-        {/* Home page: Hero + What I Do + Resources */}
+        {/* Home page: Hero + Timeline + Resources */}
         <Route
           path="/"
           element={
             <main>
               <Hero />
+              <Timeline /> {/* Activity & Timeline section */}
               <Resources />
             </main>
           }
@@ -98,7 +100,7 @@ function App() {
           }
         />
 
-        {/* Resources ko agar dedicated page bhi rakhna ho to ye route rehne de */}
+        {/* Resources dedicated page */}
         <Route
           path="/resources"
           element={
@@ -108,7 +110,17 @@ function App() {
           }
         />
 
-        {/* Admin route same */}
+        {/* Optional: dedicated timeline page */}
+        <Route
+          path="/activity"
+          element={
+            <main>
+              <Timeline />
+            </main>
+          }
+        />
+
+        {/* Admin route */}
         <Route
           path="/admin"
           element={
@@ -120,13 +132,14 @@ function App() {
           }
         />
 
-        {/* fallback */}
+        {/* Fallback */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </div>
   );
 }
 
+// Inline admin login component
 const AdminLogin = ({ onSuccess }) => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -134,6 +147,7 @@ const AdminLogin = ({ onSuccess }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (password === "Pawan_Admin_Only") {
+      setError("");
       onSuccess();
     } else {
       setError("Wrong password");

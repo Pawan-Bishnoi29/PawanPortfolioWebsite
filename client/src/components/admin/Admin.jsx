@@ -1,9 +1,7 @@
+
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { skillsAdminData } from "../../data/skillsAdminData";
-// certificatesAdminData / achievementsAdminData ab nahi chahiye
-// import { certificatesAdminData } from "../../data/certificatesAdminData";
-// import { achievementsAdminData } from "../../data/achievementsAdminData";
 
 const Admin = () => {
   const [tab, setTab] = useState("projects");
@@ -41,6 +39,10 @@ const Admin = () => {
         >
           Certificates
         </TabButton>
+        {/* NEW: Activity tab */}
+        <TabButton active={tab === "activity"} onClick={() => setTab("activity")}>
+          Activity Timeline
+        </TabButton>
       </div>
 
       {tab === "projects" && <ProjectsAdmin />}
@@ -48,6 +50,7 @@ const Admin = () => {
       {tab === "skills" && <SkillsAdmin />}
       {tab === "achievements" && <AchievementsAdmin />}
       {tab === "certificates" && <CertificatesAdmin />}
+      {tab === "activity" && <ActivityAdmin />}
     </div>
   );
 };
@@ -79,7 +82,6 @@ const ProjectsAdmin = () => {
     demo: "",
   });
 
-  // initial load
   useEffect(() => {
     axios
       .get("http://localhost:5000/api/projects")
@@ -120,14 +122,12 @@ const ProjectsAdmin = () => {
 
     try {
       if (current.id == null) {
-        // ADD
         const res = await axios.post(
           "http://localhost:5000/api/projects",
           payload
         );
         setProjects([...projects, res.data]);
       } else {
-        // UPDATE
         const res = await axios.put(
           `http://localhost:5000/api/projects/${current.id}`,
           payload
@@ -317,7 +317,6 @@ const ArticlesAdmin = () => {
     link: "",
   });
 
-  // initial load
   useEffect(() => {
     axios
       .get("http://localhost:5000/api/articles")
@@ -353,14 +352,12 @@ const ArticlesAdmin = () => {
 
     try {
       if (current.id == null) {
-        // ADD
         const res = await axios.post(
           "http://localhost:5000/api/articles",
           payload
         );
         setArticles([...articles, res.data]);
       } else {
-        // UPDATE
         const res = await axios.put(
           `http://localhost:5000/api/articles/${current.id}`,
           payload
@@ -548,7 +545,6 @@ const SkillsAdmin = () => {
     items: "",
   });
 
-  // initial load
   useEffect(() => {
     axios
       .get("http://localhost:5000/api/skills")
@@ -583,14 +579,12 @@ const SkillsAdmin = () => {
 
     try {
       if (current.id == null) {
-        // ADD
         const res = await axios.post(
           "http://localhost:5000/api/skills",
           payload
         );
         setSkills([...skills, res.data]);
       } else {
-        // UPDATE
         const res = await axios.put(
           `http://localhost:5000/api/skills/${current.id}`,
           payload
@@ -755,7 +749,6 @@ const AchievementsAdmin = () => {
     description: "",
   });
 
-  // initial load
   useEffect(() => {
     axios
       .get("http://localhost:5000/api/achievements")
@@ -785,14 +778,12 @@ const AchievementsAdmin = () => {
 
     try {
       if (current.id == null) {
-        // ADD
         const res = await axios.post(
           "http://localhost:5000/api/achievements",
           payload
         );
         setAchievements([...achievements, res.data]);
       } else {
-        // UPDATE
         const res = await axios.put(
           `http://localhost:5000/api/achievements/${current.id}`,
           payload
@@ -960,12 +951,13 @@ const CertificatesAdmin = () => {
     link: "",
   });
 
-  // initial load
   useEffect(() => {
     axios
       .get("http://localhost:5000/api/certificates")
       .then((res) => setCerts(res.data))
-      .catch((err) => console.error("Failed to load certificates", err));
+      .catch((err) =>
+        console.error("Failed to load certificates", err)
+      );
   }, []);
 
   const handleChange = (e) => {
@@ -994,14 +986,12 @@ const CertificatesAdmin = () => {
 
     try {
       if (current.id == null) {
-        // ADD
         const res = await axios.post(
           "http://localhost:5000/api/certificates",
           payload
         );
         setCerts([...certs, res.data]);
       } else {
-        // UPDATE
         const res = await axios.put(
           `http://localhost:5000/api/certificates/${current.id}`,
           payload
@@ -1168,25 +1158,236 @@ const CertificatesAdmin = () => {
   );
 };
 
-const GeneratedCodeCard = ({ title, hint, code }) => (
-  <div className="card">
-    <h3>{title}</h3>
-    <p style={{ fontSize: "12px", color: "var(--muted)" }}>{hint}</p>
-    <textarea
-      readOnly
-      value={code}
-      style={{
-        width: "100%",
-        height: "260px",
-        background: "#020617",
-        color: "#e5e7eb",
-        fontSize: "12px",
-        fontFamily: "monospace",
-        padding: "10px",
-        borderRadius: "8px",
-      }}
-    />
-  </div>
-);
+/* -------- Activity Timeline admin (API-based CRUD) -------- */
+
+const ActivityAdmin = () => {
+  const [items, setItems] = useState([]);
+  const [current, setCurrent] = useState({
+    id: null,
+    date: "",
+    title: "",
+    description: "",
+    type: "",
+  });
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:5000/api/activity")
+      .then((res) => setItems(res.data))
+      .catch((err) => console.error("Failed to load activity", err));
+  }, []);
+
+  const handleChange = (e) => {
+    setCurrent({ ...current, [e.target.name]: e.target.value });
+  };
+
+  const resetForm = () => {
+    setCurrent({
+      id: null,
+      date: "",
+      title: "",
+      description: "",
+      type: "",
+    });
+  };
+
+  const handleSubmit = async () => {
+    if (!current.title) return;
+
+    const payload = {
+      date: current.date,
+      title: current.title,
+      description: current.description,
+      type: current.type,
+    };
+
+    try {
+      if (current.id == null) {
+        const res = await axios.post(
+          "http://localhost:5000/api/activity",
+          payload
+        );
+        setItems([...items, res.data]);
+      } else {
+        const res = await axios.put(
+          `http://localhost:5000/api/activity/${current.id}`,
+          payload
+        );
+        setItems(
+          items.map((a) => (a.id === current.id ? res.data : a))
+        );
+      }
+      resetForm();
+    } catch (err) {
+      console.error("Save failed", err);
+    }
+  };
+
+  const handleEditClick = (item) => {
+    setCurrent({
+      id: item.id,
+      date: item.date || "",
+      title: item.title || "",
+      description: item.description || "",
+      type: item.type || "",
+    });
+  };
+
+  const handleDelete = async (id) => {
+    if (!window.confirm("Delete this activity item?")) return;
+    try {
+      await axios.delete(`http://localhost:5000/api/activity/${id}`);
+      setItems(items.filter((a) => a.id !== id));
+      if (current.id === id) {
+        resetForm();
+      }
+    } catch (err) {
+      console.error("Delete failed", err);
+    }
+  };
+
+  return (
+    <div className="grid">
+      <div className="card">
+        <h3>{current.id == null ? "Add Activity" : "Edit Activity"}</h3>
+        <div className="contact-form">
+          <input
+            name="date"
+            placeholder="Date (e.g. 2025-11-24 or Nov 2025)"
+            value={current.date}
+            onChange={handleChange}
+          />
+          <input
+            name="title"
+            placeholder="Title"
+            value={current.title}
+            onChange={handleChange}
+          />
+          <textarea
+            name="description"
+            placeholder="Description"
+            rows={3}
+            value={current.description}
+            onChange={handleChange}
+          />
+          <select
+            name="type"
+            value={current.type}
+            onChange={handleChange}
+            style={{
+              padding: "10px",
+              borderRadius: "8px",
+              border: "1px solid rgba(148,163,184,0.3)",
+              background: "var(--card)",
+              color: "var(--text)",
+              fontSize: "13px",
+            }}
+          >
+            <option value="">Type (optional)</option>
+            <option value="security">Security</option>
+            <option value="development">Development</option>
+          </select>
+          <div style={{ display: "flex", gap: "8px" }}>
+            <button
+              type="button"
+              className="btn-primary"
+              onClick={handleSubmit}
+            >
+              {current.id == null ? "Add Activity" : "Save Changes"}
+            </button>
+            {current.id != null && (
+              <button
+                type="button"
+                className="btn-outline"
+                onClick={resetForm}
+              >
+                Cancel
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+
+      <div className="card">
+        <h3>Existing Activity</h3>
+        <p style={{ fontSize: "12px", color: "var(--muted)" }}>
+          Timeline me dikhne wali entries yahan se manage kar.
+        </p>
+        <div
+          style={{
+            maxHeight: "260px",
+            overflowY: "auto",
+            marginTop: "10px",
+            display: "flex",
+            flexDirection: "column",
+            gap: "8px",
+          }}
+        >
+          {items.map((item) => (
+            <div
+              key={item.id}
+              style={{
+                padding: "8px",
+                borderRadius: "8px",
+                border: "1px solid rgba(148,163,184,0.3)",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                gap: "8px",
+              }}
+            >
+              <div>
+                <div style={{ fontSize: "13px", fontWeight: 600 }}>
+                  {item.title}
+                </div>
+                <div
+                  style={{
+                    fontSize: "11px",
+                    color: "var(--muted)",
+                    maxWidth: "260px",
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                  }}
+                >
+                  {item.date}
+                  {item.type ? ` • ${item.type}` : ""}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: "6px" }}>
+                <button
+                  type="button"
+                  className="btn-outline"
+                  style={{ fontSize: "11px", padding: "4px 10px" }}
+                  onClick={() => handleEditClick(item)}
+                >
+                  Edit
+                </button>
+                <button
+                  type="button"
+                  className="btn-primary"
+                  style={{
+                    fontSize: "11px",
+                    padding: "4px 10px",
+                    background: "#b91c1c",
+                    borderColor: "#b91c1c",
+                  }}
+                  onClick={() => handleDelete(item.id)}
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          ))}
+          {items.length === 0 && (
+            <div style={{ fontSize: "12px", color: "var(--muted)" }}>
+              No activity yet.
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export default Admin;
