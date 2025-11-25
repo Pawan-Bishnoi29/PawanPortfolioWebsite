@@ -377,7 +377,7 @@ body.light .theme-toggle-thumb {
   margin-bottom: 24px;
 }
 
-.whatido-grid {
+whatido-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 18px;
@@ -398,7 +398,7 @@ body.light .theme-toggle-thumb {
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
   transition: transform 0.2s ease, box-shadow 0.2s ease,
-    border-color 0.2s.ease;
+    border-color 0.2s ease;
 }
 
 .whatido-card:hover {
@@ -433,6 +433,7 @@ body.light .theme-toggle-thumb {
   max-width: 640px;
 }
 
+/* badges + hover animation */
 .hero-badges {
   display: flex;
   flex-wrap: wrap;
@@ -446,6 +447,18 @@ body.light .theme-toggle-thumb {
   border-radius: 999px;
   background: rgba(148, 163, 184, 0.12);
   border: 1px solid rgba(148, 163, 184, 0.3);
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    border-color 0.15s ease,
+    background 0.15s ease;
+}
+
+.hero-badges span:hover {
+  transform: translateY(-2px);
+  background: rgba(34, 197, 94, 0.12);
+  border-color: rgba(34, 197, 94, 0.7);
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.6);
 }
 
 /* responsive tweaks */

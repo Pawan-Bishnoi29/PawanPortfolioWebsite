@@ -1,6 +1,23 @@
 import React from "react";
 import { motion } from "framer-motion";
 
+const badgeContainer = {
+  hidden: { opacity: 0, y: 10 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      delayChildren: 0.4,
+      staggerChildren: 0.12,
+    },
+  },
+};
+
+const badgeItem = {
+  hidden: { opacity: 0, y: 8 },
+  visible: { opacity: 1, y: 0 },
+};
+
 const Hero = () => {
   return (
     <>
@@ -12,12 +29,12 @@ const Hero = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, type: "spring" }}
         >
-          <p className="tag">Java Full Stack · Security Researcher</p>
+          <p className="tag">Python Full Stack · Security Researcher</p>
 
           <h1>
             Securing Web Apps with
             <br />
-            Full‑Stack & Offensive Security
+            Full‑Stack Development & Offensive Security
           </h1>
 
           <p className="subtitle">
@@ -25,14 +42,19 @@ const Hero = () => {
             experience in e‑commerce, bug bounty, and web application security.
           </p>
 
-          {/* New badges row */}
-          <div className="hero-badges">
-            <span>Web App Pentesting</span>
-            <span>API Security</span>
-            <span>Secure MERN Apps</span>
-          </div>
+          {/* New badges row with animation */}
+          <motion.div
+            className="hero-badges"
+            variants={badgeContainer}
+            initial="hidden"
+            animate="visible"
+          >
+            <motion.span variants={badgeItem}>Web App Pentesting</motion.span>
+            <motion.span variants={badgeItem}>API Security</motion.span>
+            <motion.span variants={badgeItem}>Secure Apps</motion.span>
+          </motion.div>
 
-          <div className="hero-buttons">
+          {/* <div className="hero-buttons">
             <motion.a
               href="#projects"
               className="btn-primary"
@@ -52,11 +74,10 @@ const Hero = () => {
             >
               Contact Me
             </motion.a>
-          </div>
+          </div> */}
         </motion.div>
       </section>
 
-      {/* What I Do Section - Hero ke turant neeche, sirf Home page pe dikh raha hai kyunki Hero sirf / me use ho raha hai */}
       <section className="whatido">
         <div className="whatido-header">
           <h2>What I Do</h2>
@@ -86,7 +107,7 @@ const Hero = () => {
           <div className="whatido-card">
             <h3>Full Stack Development</h3>
             <p>
-              Building secure MERN applications with clean architecture, reusable
+              Building secure applications with clean architecture, reusable
               components, and production‑ready features.
             </p>
           </div>
