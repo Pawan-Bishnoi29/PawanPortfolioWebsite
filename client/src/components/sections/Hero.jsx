@@ -54,27 +54,8 @@ const Hero = () => {
             <motion.span variants={badgeItem}>Secure Apps</motion.span>
           </motion.div>
 
-          {/* <div className="hero-buttons">
-            <motion.a
-              href="#projects"
-              className="btn-primary"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.97 }}
-              transition={{ type: "spring", stiffness: 300, damping: 20 }}
-            >
-              View Projects
-            </motion.a>
-
-            <motion.a
-              href="#contact"
-              className="btn-outline"
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-              transition={{ type: "spring", stiffness: 300, damping: 20 }}
-            >
-              Contact Me
-            </motion.a>
-          </div> */}
+          {/* buttons currently off, styles kept in CSS */}
+          {/* <div className="hero-buttons"> ... </div> */}
         </motion.div>
       </section>
 

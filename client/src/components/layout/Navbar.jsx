@@ -25,6 +25,14 @@ const Navbar = ({ theme, setTheme }) => {
             Home
           </Link>
         </li>
+
+        {/* NEW: About link */}
+        <li className={isActive("/about") ? "nav-active" : ""}>
+          <Link to="/about" className="nav-link">
+            About
+          </Link>
+        </li>
+
         <li className={isActive("/projects") ? "nav-active" : ""}>
           <Link to="/projects" className="nav-link">
             Projects

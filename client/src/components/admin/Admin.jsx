@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { skillsAdminData } from "../../data/skillsAdminData";
@@ -39,6 +38,10 @@ const Admin = () => {
         >
           Certificates
         </TabButton>
+        {/* NEW: About tab */}
+        <TabButton active={tab === "about"} onClick={() => setTab("about")}>
+          About
+        </TabButton>
         {/* NEW: Activity tab */}
         <TabButton active={tab === "activity"} onClick={() => setTab("activity")}>
           Activity Timeline
@@ -50,6 +53,7 @@ const Admin = () => {
       {tab === "skills" && <SkillsAdmin />}
       {tab === "achievements" && <AchievementsAdmin />}
       {tab === "certificates" && <CertificatesAdmin />}
+      {tab === "about" && <AboutAdmin />}{/* NEW */}
       {tab === "activity" && <ActivityAdmin />}
     </div>
   );
@@ -107,7 +111,7 @@ const ProjectsAdmin = () => {
   const handleSubmit = async () => {
     if (!current.title) return;
 
-    const techArray = current.tech
+    const techArray = (current.tech || "")
       .split(",")
       .map((t) => t.trim())
       .filter(Boolean);
@@ -132,9 +136,7 @@ const ProjectsAdmin = () => {
           `http://localhost:5000/api/projects/${current.id}`,
           payload
         );
-        setProjects(
-          projects.map((p) => (p.id === current.id ? res.data : p))
-        );
+        setProjects(projects.map((p) => (p.id === current.id ? res.data : p)));
       }
       resetForm();
     } catch (err) {
@@ -362,9 +364,7 @@ const ArticlesAdmin = () => {
           `http://localhost:5000/api/articles/${current.id}`,
           payload
         );
-        setArticles(
-          articles.map((a) => (a.id === current.id ? res.data : a))
-        );
+        setArticles(articles.map((a) => (a.id === current.id ? res.data : a)));
       }
       resetForm();
     } catch (err) {
@@ -567,7 +567,7 @@ const SkillsAdmin = () => {
   const handleSubmit = async () => {
     if (!current.category) return;
 
-    const itemsArray = current.items
+    const itemsArray = (current.items || "")
       .split(",")
       .map((t) => t.trim())
       .filter(Boolean);
@@ -589,9 +589,7 @@ const SkillsAdmin = () => {
           `http://localhost:5000/api/skills/${current.id}`,
           payload
         );
-        setSkills(
-          skills.map((s) => (s.id === current.id ? res.data : s))
-        );
+        setSkills(skills.map((s) => (s.id === current.id ? res.data : s)));
       }
       resetForm();
     } catch (err) {
@@ -1158,6 +1156,204 @@ const CertificatesAdmin = () => {
   );
 };
 
+/* -------- About admin (API-based CRUD) -------- */
+
+const AboutAdmin = () => {
+  const [items, setItems] = useState([]);
+  const [current, setCurrent] = useState({
+    id: null,
+    title: "",
+    body: "",
+  });
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:5000/api/about")
+      .then((res) => setItems(res.data))
+      .catch((err) => console.error("Failed to load about items", err));
+  }, []);
+
+  const handleChange = (e) => {
+    setCurrent({ ...current, [e.target.name]: e.target.value });
+  };
+
+  const resetForm = () => {
+    setCurrent({
+      id: null,
+      title: "",
+      body: "",
+    });
+  };
+
+  const handleSubmit = async () => {
+    if (!current.title) return;
+
+    const payload = {
+      title: current.title,
+      body: current.body,
+    };
+
+    try {
+      if (current.id == null) {
+        const res = await axios.post(
+          "http://localhost:5000/api/about",
+          payload
+        );
+        setItems([...items, res.data]);
+      } else {
+        const res = await axios.put(
+          `http://localhost:5000/api/about/${current.id}`,
+          payload
+        );
+        setItems(items.map((i) => (i.id === current.id ? res.data : i)));
+      }
+      resetForm();
+    } catch (err) {
+      console.error("Save failed", err);
+    }
+  };
+
+  const handleEditClick = (item) => {
+    setCurrent({
+      id: item.id,
+      title: item.title || "",
+      body: item.body || "",
+    });
+  };
+
+  const handleDelete = async (id) => {
+    if (!window.confirm("Delete this about block?")) return;
+    try {
+      await axios.delete(`http://localhost:5000/api/about/${id}`);
+      setItems(items.filter((i) => i.id !== id));
+      if (current.id === id) {
+        resetForm();
+      }
+    } catch (err) {
+      console.error("Delete failed", err);
+    }
+  };
+
+  return (
+    <div className="grid">
+      <div className="card">
+        <h3>{current.id == null ? "Add About Block" : "Edit About Block"}</h3>
+        <div className="contact-form">
+          <input
+            name="title"
+            placeholder="Title (e.g. Who I am)"
+            value={current.title}
+            onChange={handleChange}
+          />
+          <textarea
+            name="body"
+            placeholder="Description"
+            rows={4}
+            value={current.body}
+            onChange={handleChange}
+          />
+          <div style={{ display: "flex", gap: "8px" }}>
+            <button
+              type="button"
+              className="btn-primary"
+              onClick={handleSubmit}
+            >
+              {current.id == null ? "Add Block" : "Save Changes"}
+            </button>
+            {current.id != null && (
+              <button
+                type="button"
+                className="btn-outline"
+                onClick={resetForm}
+              >
+                Cancel
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+
+      <div className="card">
+        <h3>Existing About Blocks</h3>
+        <p style={{ fontSize: "12px", color: "var(--muted)" }}>
+          Home/About page me dikhne wale 3 cards yahan se manage kar.
+        </p>
+        <div
+          style={{
+            maxHeight: "260px",
+            overflowY: "auto",
+            marginTop: "10px",
+            display: "flex",
+            flexDirection: "column",
+            gap: "8px",
+          }}
+        >
+          {items.map((item) => (
+            <div
+              key={item.id}
+              style={{
+                padding: "8px",
+                borderRadius: "8px",
+                border: "1px solid rgba(148,163,184,0.3)",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                gap: "8px",
+              }}
+            >
+              <div>
+                <div style={{ fontSize: "13px", fontWeight: 600 }}>
+                  {item.title}
+                </div>
+                <div
+                  style={{
+                    fontSize: "11px",
+                    color: "var(--muted)",
+                    maxWidth: "260px",
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                  }}
+                >
+                  {item.body}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: "6px" }}>
+                <button
+                  type="button"
+                  className="btn-outline"
+                  style={{ fontSize: "11px", padding: "4px 10px" }}
+                  onClick={() => handleEditClick(item)}
+                >
+                  Edit
+                </button>
+                <button
+                  type="button"
+                  className="btn-primary"
+                  style={{
+                    fontSize: "11px",
+                    padding: "4px 10px",
+                    background: "#b91c1c",
+                    borderColor: "#b91c1c",
+                  }}
+                  onClick={() => handleDelete(item.id)}
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          ))}
+          {items.length === 0 && (
+            <div style={{ fontSize: "12px", color: "var(--muted)" }}>
+              No about blocks yet.
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 /* -------- Activity Timeline admin (API-based CRUD) -------- */
 
 const ActivityAdmin = () => {
@@ -1213,9 +1409,7 @@ const ActivityAdmin = () => {
           `http://localhost:5000/api/activity/${current.id}`,
           payload
         );
-        setItems(
-          items.map((a) => (a.id === current.id ? res.data : a))
-        );
+        setItems(items.map((a) => (a.id === current.id ? res.data : a)));
       }
       resetForm();
     } catch (err) {

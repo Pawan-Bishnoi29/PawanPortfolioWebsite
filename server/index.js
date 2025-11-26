@@ -482,5 +482,86 @@ app.delete("/api/activity/:id", (req, res) => {
   res.json(removed);
 });
 
+/* =========================
+   ✦ NEW: About API (CRUD)
+   ========================= */
+
+let aboutItems = [
+  {
+    id: 1,
+    title: "Who I am",
+    body:
+      "Based in India, working at the intersection of full‑stack development and offensive security. " +
+      "Exploring bug bounty, CTF‑style labs, and real‑world projects to sharpen both coding and hacking skills.",
+  },
+  {
+    id: 2,
+    title: "How I work",
+    body:
+      "Prefer shipping secure, testable features over quick hacks. Comfortable moving from recon and " +
+      "threat‑modeling to implementing fixes in the codebase using Python, JavaScript, and modern stacks.",
+  },
+  {
+    id: 3,
+    title: "What I'm looking for",
+    body:
+      "Open to roles and projects where I can audit existing web apps, harden APIs, and build secure " +
+      "features end‑to‑end with clear, documented findings for teams.",
+  },
+];
+
+// GET all about items
+app.get("/api/about", (req, res) => {
+  res.json(aboutItems);
+});
+
+// ADD about item
+app.post("/api/about", (req, res) => {
+  const { title, body } = req.body;
+  if (!title) {
+    return res.status(400).json({ error: "Title is required" });
+  }
+
+  const newItem = {
+    id: aboutItems.length ? aboutItems[aboutItems.length - 1].id + 1 : 1,
+    title,
+    body: body || "",
+  };
+
+  aboutItems.push(newItem);
+  res.status(201).json(newItem);
+});
+
+// UPDATE about item
+app.put("/api/about/:id", (req, res) => {
+  const id = Number(req.params.id);
+  const index = aboutItems.findIndex((a) => a.id === id);
+  if (index === -1) {
+    return res.status(404).json({ error: "About item not found" });
+  }
+
+  const { title, body } = req.body;
+  aboutItems[index] = {
+    ...aboutItems[index],
+    title: title ?? aboutItems[index].title,
+    body: body ?? aboutItems[index].body,
+  };
+
+  res.json(aboutItems[index]);
+});
+
+// DELETE about item
+app.delete("/api/about/:id", (req, res) => {
+  const id = Number(req.params.id);
+  const index = aboutItems.findIndex((a) => a.id === id);
+  if (index === -1) {
+    return res.status(404).json({ error: "About item not found" });
+  }
+
+  const removed = aboutItems[index];
+  aboutItems = aboutItems.filter((a) => a.id !== id);
+  res.json(removed);
+});
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
+import axios from "axios";
 import Navbar from "./components/layout/Navbar";
 import Hero from "./components/sections/Hero";
 import Projects from "./components/sections/Projects";
@@ -11,11 +12,13 @@ import Contact from "./components/sections/Contact";
 import Admin from "./components/admin/Admin";
 import Resources from "./components/sections/Resources";
 import Timeline from "./components/sections/Timeline"; // NEW
+import About from "./components/sections/About";       // NEW
 import "./App.css";
 
 function App() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [theme, setTheme] = useState("dark");
+  const [aboutItems, setAboutItems] = useState([]); // NEW
 
   // first load pe theme restore
   useEffect(() => {
@@ -33,19 +36,40 @@ function App() {
     localStorage.setItem("theme", theme);
   }, [theme]);
 
+  // About items load from API
+  useEffect(() => {
+    axios
+      .get("http://localhost:5000/api/about")
+      .then((res) => setAboutItems(res.data || []))
+      .catch((err) => {
+        console.error("Failed to load about items", err);
+        setAboutItems([]);
+      });
+  }, []);
+
   return (
     <div className="app-root">
       <Navbar theme={theme} setTheme={setTheme} />
 
       <Routes>
-        {/* Home page: Hero + Timeline + Resources */}
+        {/* Home page: Hero + Timeline + Resources (same as before) */}
         <Route
           path="/"
           element={
             <main>
               <Hero />
-              <Timeline /> {/* Activity & Timeline section */}
+              <Timeline />
               <Resources />
+            </main>
+          }
+        />
+
+        {/* NEW: About page as separate section */}
+        <Route
+          path="/about"
+          element={
+            <main>
+              <About items={aboutItems} />
             </main>
           }
         />

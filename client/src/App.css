@@ -1,33 +1,34 @@
 :root {
-  --bg: #020617;
-  --bg-alt: #0f172a;
-  --card: #020617;
-  --accent: #22c55e;
-  --accent-soft: #16a34a;
-  --text: #e5e7eb;
-  --muted: #94a3b8;
+  /* New dark + teal palette */
+  --bg: #050816;        /* main background - deep ink */
+  --bg-alt: #0b1120;    /* section background */
+  --card: #020617;      /* card background */
+  --accent: #14b8a6;    /* primary accent: teal */
+  --accent-soft: #22c1b6; /* lighter teal for hover */
+  --text: #e5f3ff;      /* main text - soft off-white */
+  --muted: #9ca3af;     /* muted text */
 }
 
 /* Dark theme (default) */
 body.dark {
-  --bg: #020617;
-  --bg-alt: #0f172a;
+  --bg: #050816;
+  --bg-alt: #0b1120;
   --card: #020617;
-  --accent: #22c55e;
-  --accent-soft: #16a34a;
-  --text: #e5e7eb;
-  --muted: #94a3b8;
+  --accent: #14b8a6;
+  --accent-soft: #22c1b6;
+  --text: #e5f3ff;
+  --muted: #9ca3af;
 }
 
 /* Light theme */
 body.light {
-  --bg: #f8fafc;
-  --bg-alt: #e4e4e7;
-  --card: #ffffff;
-  --accent: #16a34a;
-  --accent-soft: #22c55e;
-  --text: #020617;
-  --muted: #4b5563;
+  --bg: #ffffff;        /* pure white background */
+  --bg-alt: #e5e7f0;
+  --card: #f9fafb;      /* light grey card for better separation */
+  --accent: #0f766e;    /* darker teal in light mode */
+  --accent-soft: #14b8a6;
+  --text: #020617;      /* very dark text */
+  --muted: #374151;     /* darker muted text */
 }
 
 body {
@@ -49,18 +50,18 @@ body {
   top: 0;
   z-index: 50;
   backdrop-filter: blur(12px);
-  background: rgba(15, 23, 42, 0.9);
+  background: rgba(5, 8, 22, 0.92);
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 12px 40px;
-  border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.25);
 }
 
 /* Light theme navbar */
 body.light .navbar {
-  background: rgba(248, 250, 252, 0.9);
-  border-bottom-color: rgba(148, 163, 184, 0.4);
+  background: rgba(245, 245, 255, 0.94);
+  border-bottom-color: rgba(148, 163, 184, 0.35);
 }
 
 .navbar .logo {
@@ -98,6 +99,7 @@ body.light .navbar {
   font-size: 13px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+  font-weight: 500;              /* NEW: slightly bolder nav text */
   transition:
     color 0.2s ease,
     transform 0.15s ease;
@@ -110,12 +112,13 @@ body.light .navbar {
   transform: translateY(-1px);
 }
 
-/* active thoda bold */
+/* active ko thoda distinct color de */
 .navbar li.nav-active .nav-link {
+  color: #a5b4fc;        /* soft indigo for active tab */
   font-weight: 600;
 }
 
-/* animated underline */
+/* animated underline – teal to purple blend */
 .nav-link::after {
   content: "";
   position: absolute;
@@ -123,7 +126,11 @@ body.light .navbar {
   bottom: -3px;
   width: 100%;
   height: 2px;
-  background: linear-gradient(90deg, var(--accent), var(--accent-soft));
+  background: linear-gradient(
+    90deg,
+    #14b8a6,  /* teal */
+    #8b5cf6   /* violet */
+  );
   transform: scaleX(0);
   transform-origin: center;
   transition: transform 0.2s ease-out;
@@ -147,6 +154,7 @@ body.light .navbar {
   display: flex;
   align-items: center;
   justify-content: center;
+  font-weight: 500;             /* NEW: icons links slightly bolder */
 }
 
 .nav-icons a:hover {
@@ -162,7 +170,7 @@ body.light .navbar {
   background: radial-gradient(
     circle at top,
     rgba(148, 163, 184, 0.15),
-    rgba(15, 23, 42, 0.95)
+    rgba(5, 8, 22, 0.95)
   );
   padding: 2px;
   display: flex;
@@ -209,23 +217,32 @@ body.light .theme-toggle-thumb {
   margin: 0 auto;
 }
 
+.hero-content {
+  max-width: 640px;
+}
+
 .hero .tag {
   font-size: 13px;
   text-transform: uppercase;
   letter-spacing: 0.15em;
   color: var(--accent);
+  font-weight: 600;             /* NEW: tag more readable */
 }
 
 .hero h1 {
   font-size: 40px;
-  margin: 10px 0;
+  line-height: 1.15;
+  margin: 10px 0 14px;
 }
 
 .hero .subtitle {
   max-width: 520px;
   color: var(--muted);
+  font-size: 15px;
+  font-weight: 500;             /* NEW: subtitle slightly bolder */
 }
 
+/* Hero buttons (currently commented in JSX, keep styles) */
 .hero-buttons {
   margin-top: 24px;
   display: flex;
@@ -243,6 +260,7 @@ body.light .theme-toggle-thumb {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  font-weight: 500;             /* NEW: button labels clearer */
 }
 
 .btn-primary {
@@ -261,7 +279,44 @@ body.light .theme-toggle-thumb {
 }
 
 .btn-outline:hover {
-  background: rgba(34, 197, 94, 0.1);
+  background: rgba(20, 184, 166, 0.12);
+}
+
+/* badges + hover animation – teal + purple blend */
+.hero-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.hero-badges span {
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: radial-gradient(
+    circle at top left,
+    rgba(20, 184, 166, 0.12),
+    rgba(79, 70, 229, 0.14)
+  );
+  border: 1px solid rgba(139, 92, 246, 0.5);
+  font-weight: 500;             /* NEW */
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    border-color 0.15s ease,
+    background 0.15s ease;
+}
+
+.hero-badges span:hover {
+  transform: translateY(-2px);
+  background: radial-gradient(
+    circle at top left,
+    rgba(20, 184, 166, 0.18),
+    rgba(139, 92, 246, 0.24)
+  );
+  border-color: rgba(20, 184, 166, 0.8);
+  box-shadow: 0 8px 18px rgba(5, 8, 22, 0.8);
 }
 
 /* Cards & grid */
@@ -271,20 +326,20 @@ body.light .theme-toggle-thumb {
   gap: 18px;
 }
 
-/* glassmorphism + glow cards */
+/* glassmorphism + glow cards – dual tone */
 .card {
   position: relative;
   background: radial-gradient(
       circle at top left,
-      rgba(34, 197, 94, 0.12),
-      var(--card)
+      rgba(20, 184, 166, 0.18),
+      rgba(15, 23, 42, 1)
     );
   border-radius: 18px;
   padding: 18px;
   border: 1px solid rgba(148, 163, 184, 0.35);
   box-shadow:
-    0 18px 45px rgba(15, 23, 42, 0.9),
-    0 0 0 1px rgba(15, 23, 42, 0.8);
+    0 18px 45px rgba(5, 8, 22, 0.95),
+    0 0 24px rgba(139, 92, 246, 0.22);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
   overflow: hidden;
@@ -305,9 +360,9 @@ body.light .theme-toggle-thumb {
 .card:hover {
   transform: translateY(-4px);
   box-shadow:
-    0 22px 60px rgba(15, 23, 42, 1),
-    0 0 18px rgba(34, 197, 94, 0.45);
-  border-color: rgba(34, 197, 94, 0.7);
+    0 22px 60px rgba(5, 8, 22, 1),
+    0 0 26px rgba(20, 184, 166, 0.4);
+  border-color: rgba(20, 184, 166, 0.7);
 }
 
 .card h3 {
@@ -326,6 +381,7 @@ body.light .theme-toggle-thumb {
   padding: 4px 8px;
   border-radius: 999px;
   background: rgba(148, 163, 184, 0.1);
+  font-weight: 500;             /* NEW */
 }
 
 /* Contact form */
@@ -343,6 +399,7 @@ body.light .theme-toggle-thumb {
   border: 1px solid rgba(148, 163, 184, 0.3);
   background: var(--card);
   color: var(--text);
+  font-weight: 500;             /* NEW: form text clearer */
 }
 
 .status {
@@ -353,9 +410,45 @@ body.light .theme-toggle-thumb {
 /* Footer */
 .footer {
   text-align: center;
-  padding: 20px;
+  padding: 24px 40px 20px;
   color: var(--muted);
-  border-top: 1px solid rgba(148, 163, 184, 0.2);
+  border-top: 1px solid rgba(148, 163, 184, 0.25);
+  font-size: 13px;
+  font-weight: 500;             /* NEW: footer text less faint */
+}
+
+.footer-inner {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-left {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.footer-right {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 12px;
+}
+
+.footer a {
+  color: var(--muted);
+  text-decoration: none;
+  font-weight: 500;             /* NEW */
+}
+
+.footer a:hover {
+  color: var(--accent);
 }
 
 /* What I Do section */
@@ -375,9 +468,10 @@ body.light .theme-toggle-thumb {
   color: var(--muted);
   font-size: 14px;
   margin-bottom: 24px;
+  font-weight: 500;             /* NEW */
 }
 
-whatido-grid {
+.whatido-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 18px;
@@ -386,15 +480,15 @@ whatido-grid {
 .whatido-card {
   background: radial-gradient(
       circle at top left,
-      rgba(34, 197, 94, 0.12),
-      var(--card)
+      rgba(20, 184, 166, 0.18),
+      rgba(15, 23, 42, 1)
     );
   border-radius: 18px;
   padding: 18px;
   border: 1px solid rgba(148, 163, 184, 0.35);
   box-shadow:
-    0 16px 40px rgba(15, 23, 42, 0.9),
-    0 0 0 1px rgba(15, 23, 42, 0.8);
+    0 16px 40px rgba(5, 8, 22, 0.95),
+    0 0 0 1px rgba(5, 8, 22, 0.85);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
   transition: transform 0.2s ease, box-shadow 0.2s ease,
@@ -404,9 +498,9 @@ whatido-grid {
 .whatido-card:hover {
   transform: translateY(-4px);
   box-shadow:
-    0 22px 60px rgba(15, 23, 42, 1),
-    0 0 18px rgba(34, 197, 94, 0.45);
-  border-color: rgba(34, 197, 94, 0.7);
+    0 22px 60px rgba(5, 8, 22, 1),
+    0 0 18px rgba(20, 184, 166, 0.45);
+  border-color: rgba(20, 184, 166, 0.7);
 }
 
 .whatido-card h3 {
@@ -415,7 +509,7 @@ whatido-grid {
   font-size: 16px;
 }
 
-.whatido-card p {
+whatido-card p {
   font-size: 13px;
   color: var(--muted);
   line-height: 1.5;
@@ -428,87 +522,7 @@ whatido-grid {
   }
 }
 
-/* Hero improvements */
-.hero-content {
-  max-width: 640px;
-}
-
-/* badges + hover animation */
-.hero-badges {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 18px;
-}
-
-.hero-badges span {
-  font-size: 11px;
-  padding: 4px 10px;
-  border-radius: 999px;
-  background: rgba(148, 163, 184, 0.12);
-  border: 1px solid rgba(148, 163, 184, 0.3);
-  transition:
-    transform 0.15s ease,
-    box-shadow 0.15s ease,
-    border-color 0.15s ease,
-    background 0.15s ease;
-}
-
-.hero-badges span:hover {
-  transform: translateY(-2px);
-  background: rgba(34, 197, 94, 0.12);
-  border-color: rgba(34, 197, 94, 0.7);
-  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.6);
-}
-
-/* responsive tweaks */
-@media (max-width: 600px) {
-  .hero {
-    padding: 90px 20px 60px;
-  }
-
-  .hero h1 {
-    font-size: 28px;
-    line-height: 1.2;
-  }
-
-  .hero .subtitle {
-    font-size: 14px;
-  }
-
-  .hero-buttons {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-}
-
-.resources {
-  max-width: 1000px;
-  margin: 0 auto;
-}
-
-.resources-subtitle {
-  max-width: 520px;
-  color: var(--muted);
-  font-size: 14px;
-  margin-bottom: 24px;
-}
-
-.resources .card {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.resources-actions {
-  margin-top: 16px;
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
 /* NEW: Projects filter + status badge */
-
 .findings-filters {
   display: flex;
   flex-wrap: wrap;
@@ -516,21 +530,23 @@ whatido-grid {
   margin-bottom: 18px;
 }
 
-.findings-filter-group {
+findings-filter-group {
   display: flex;
   flex-direction: column;
   gap: 4px;
   font-size: 12px;
   color: var(--muted);
+  font-weight: 500;             /* NEW */
 }
 
-.findings-filter-group select {
+findings-filter-group select {
   padding: 6px 10px;
   border-radius: 8px;
   border: 1px solid rgba(148, 163, 184, 0.35);
   background: var(--card);
   color: var(--text);
   font-size: 13px;
+  font-weight: 500;             /* NEW */
 }
 
 .project-header {
@@ -545,7 +561,10 @@ whatido-grid {
   border-radius: 999px;
   font-size: 11px;
   color: #0b1120;
+  font-weight: 600;             /* NEW: small badge more legible */
 }
+
+/* Timeline */
 .timeline {
   position: relative;
   margin-top: 10px;
@@ -567,7 +586,7 @@ whatido-grid {
   height: 10px;
   border-radius: 999px;
   background: var(--accent);
-  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.25);
+  box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.35);
 }
 
 .timeline-content h3 {
@@ -579,6 +598,7 @@ whatido-grid {
   margin: 0;
   font-size: 13px;
   color: var(--muted);
+  font-weight: 500;             /* NEW */
 }
 
 .timeline-meta {
@@ -588,6 +608,7 @@ whatido-grid {
   margin-bottom: 4px;
   font-size: 12px;
   color: var(--muted);
+  font-weight: 500;             /* NEW */
 }
 
 .timeline-type {
@@ -604,4 +625,116 @@ whatido-grid {
 .timeline-type-development {
   background: rgba(34, 197, 94, 0.15);
   color: #4ade80;
+}
+
+/* Hero responsive tweaks */
+@media (max-width: 600px) {
+  .hero {
+    padding: 90px 20px 60px;
+  }
+
+  .hero h1 {
+    font-size: 28px;
+    line-height: 1.2;
+  }
+
+  .hero .subtitle {
+    font-size: 14px;
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* Resources */
+.resources {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.resources-subtitle {
+  max-width: 520px;
+  color: var(--muted);
+  font-size: 14px;
+  margin-bottom: 24px;
+  font-weight: 500;             /* NEW */
+}
+
+.resources .card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.resources-actions {
+  margin-top: 16px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* About section */
+.about-inner {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.about h2 {
+  font-size: 26px;
+  margin-bottom: 10px;
+}
+
+.about-intro {
+  max-width: 620px;
+  color: var(--muted);
+  font-size: 14px;
+  margin-bottom: 24px;
+  font-weight: 500;             /* NEW */
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 18px;
+}
+
+.about-card {
+  background: radial-gradient(
+      circle at top left,
+      rgba(20, 184, 166, 0.16),
+      rgba(15, 23, 42, 1)
+    );
+  border-radius: 18px;
+  padding: 18px;
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  box-shadow:
+    0 16px 40px rgba(5, 8, 22, 0.9),
+    0 0 0 1px rgba(5, 8, 22, 0.85);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  transition: transform 0.2s ease, box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.about-card:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 22px 60px rgba(5, 8, 22, 1),
+    0 0 20px rgba(20, 184, 166, 0.45);
+  border-color: rgba(20, 184, 166, 0.7);
+}
+
+.about-card h3 {
+  margin-top: 0;
+  margin-bottom: 8px;
+  font-size: 16px;
+}
+
+.about-card p {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.5;
+  font-weight: 500;             /* NEW */
 }
